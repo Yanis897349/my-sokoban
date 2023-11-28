@@ -32,7 +32,7 @@ storage_t *create_storage(char **map)
 
     if (storage == NULL)
         return NULL;
-    storage->c = 'X';
+    storage->c = 'O';
     storage->pos = get_storage_position(map);
     if (storage->pos == NULL)
         return NULL;
