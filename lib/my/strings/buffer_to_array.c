@@ -40,7 +40,7 @@ char **buffer_to_array(char *buffer, char delimiter)
     char *token;
     int line = 0;
 
-    for (int i; buffer[i] != '\0'; i++)
+    for (int i = 0; buffer[i] != '\0'; i++)
         if (buffer[i] == delimiter)
             line_count++;
     board = malloc(sizeof(char *) * (line_count + 1));
