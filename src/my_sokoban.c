@@ -36,8 +36,9 @@ int main(int ac, char **av)
     player = create_player(map);
     if (player == NULL)
         return 84;
-    printf("Player position: %d, %d\n", player->pos->x, player->pos->y);
     free(buffer);
     my_freearray(map);
+    free(player->pos);
+    free(player);
     return (0);
 }
