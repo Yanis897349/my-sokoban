@@ -10,6 +10,9 @@
 #include "box.h"
 #include "storage.h"
 #include "player.h"
+#define WALL_CHAR '#'
+#define PLAYER_CHAR 'P'
+#define DEFAULT_CHAR ' '
 
 typedef enum game_state_e {
     WIN = 0,
