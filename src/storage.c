@@ -6,35 +6,48 @@
 */
 
 #include "storage.h"
+#include "position.h"
+#include "my_sokoban.h"
 #include <stdlib.h>
 
-static position_t *get_storage_position(char **map)
+int get_storage_count(char **map)
 {
-    position_t *storage_position = malloc(sizeof(position_t));
-    int pos_in_buffer = - 1;
+    int storage_count = 0;
 
-    if (storage_position == NULL)
-        return NULL;
-    for (int i = 0; map[i] != NULL; i++) {
-        pos_in_buffer = get_pos_in_buffer(map[i], 'O');
-        if (pos_in_buffer != -1) {
-            storage_position->x = pos_in_buffer;
-            storage_position->y = i;
-            return storage_position;
-        }
-    }
-    return NULL;
+    for (int i = 0; map[i] != NULL; i++)
+        for (int j = 0; map[i][j] != '\0'; j++)
+            storage_count = (map[i][j] == STORAGE_CHAR) ? storage_count + 1
+                : storage_count;
+    return storage_count;
 }
 
-storage_t *create_storage(char **map)
+static storage_t *create_storage(char **map, position_t *pos)
 {
     storage_t *storage = malloc(sizeof(storage_t));
 
     if (storage == NULL)
         return NULL;
-    storage->c = 'O';
-    storage->pos = get_storage_position(map);
+    storage->c = STORAGE_CHAR;
+    storage->pos = pos;
     if (storage->pos == NULL)
         return NULL;
     return storage;
+}
+
+storage_t **create_storages(char **map, int storage_count)
+{
+    storage_t **storages = malloc(sizeof(storage_t *) * (storage_count + 1));
+    position_t **positions = get_positions(map, STORAGE_CHAR, storage_count);
+
+    if (storages == NULL)
+        return NULL;
+    if (positions == NULL)
+        return NULL;
+    for (int i = 0; i < storage_count; i++) {
+        storages[i] = create_storage(map, positions[i]);
+        if (storages[i] == NULL)
+            return NULL;
+    }
+    storages[storage_count] = NULL;
+    return storages;
 }
