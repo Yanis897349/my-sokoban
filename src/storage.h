@@ -13,4 +13,4 @@ typedef struct storage_s {
     position_t *pos;
 } storage_t;
 
-storage_t *create_storage(char **map);
+storage_t **create_storages(char **map, int storage_count);

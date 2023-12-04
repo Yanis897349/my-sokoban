@@ -13,6 +13,8 @@
 #define WALL_CHAR '#'
 #define PLAYER_CHAR 'P'
 #define DEFAULT_CHAR ' '
+#define BOX_CHAR 'X'
+#define STORAGE_CHAR 'O'
 
 typedef enum game_state_e {
     WIN = 0,
