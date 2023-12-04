@@ -15,7 +15,8 @@ MAIN_SRC = ./src/my_sokoban.c
 SRC = ./src/player.c \
 	./src/position.c \
 	./src/box.c \
-	./src/storage.c
+	./src/storage.c \
+	./src/utils.c
 SRC_TEST = ./tests/test_sokoban.c
 OBJS = $(MAIN_SRC:.c=.o) $(SRC:.c=.o)
 TEST_OBJS = $(SRC:.c=.o) $(SRC_TEST:.c=.o)

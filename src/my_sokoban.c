@@ -19,29 +19,7 @@
 #include "storage.h"
 #include "player.h"
 #include "position.h"
-
-static void free_game(game_t *game)
-{
-    free(game->player->pos);
-    free(game->player);
-    my_freearray(game->map);
-    free(game);
-}
-
-static char **get_map(char *filepath)
-{
-    char *buffer = NULL;
-    char **map = NULL;
-
-    buffer = file_to_buffer(filepath);
-    if (buffer == NULL)
-        return NULL;
-    map = buffer_to_array(buffer, '\n');
-    free(buffer);
-    if (map == NULL)
-        return NULL;
-    return map;
-}
+#include "utils.h"
 
 static int is_game_win(game_t *game)
 {
@@ -59,6 +37,13 @@ static int is_game_loose(game_t *game)
             return 1;
     }
     return 0;
+}
+
+static int is_game_valid(game_t *game)
+{
+    if (game->nb_boxes != game->nb_storages)
+        return 0;
+    return 1;
 }
 
 game_state_t display_map(game_t *game)
@@ -96,10 +81,12 @@ static game_t *create_game(char **map)
     if (game->storages == NULL)
         return NULL;
     game->state = PLAYING;
+    if (is_game_valid(game) == 0)
+        return NULL;
     return game;
 }
 
-static int run_game_loop(game_t *game)
+static void run_game_loop(game_t *game)
 {
     int key = 0;
 
@@ -116,7 +103,6 @@ static int run_game_loop(game_t *game)
         key = getch();
     }
     endwin();
-    return EXIT_SUCCESS;
 }
 
 int main(int ac, char **av)
@@ -130,8 +116,7 @@ int main(int ac, char **av)
     game = create_game(map);
     if (game == NULL)
         return 84;
-    if (run_game_loop(game) == EXIT_FAILURE)
-        return 84;
+    run_game_loop(game);
     free_game(game);
-    return EXIT_SUCCESS;
+    return game->state;
 }
