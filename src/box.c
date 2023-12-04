@@ -34,27 +34,37 @@ static box_t *create_box(char **map, position_t *pos)
     return box;
 }
 
-void move_box(int key, player_t *player, char **map)
+box_t *get_box_at_pos(box_t **boxes, int x, int y)
+{
+    for (int i = 0; boxes[i] != NULL; i++) {
+        if (boxes[i]->pos->x == x && boxes[i]->pos->y == y)
+            return boxes[i];
+    }
+    return NULL;
+}
+
+void move_box(int key, game_t *game, box_t *box)
 {
     position_t *new_pos = malloc(sizeof(position_t));
-    position_t *box_pos = malloc(sizeof(position_t));
+    player_t *player = game->player;
+    char **map = game->map;
+    int move_type = 0;
 
-    if (new_pos == NULL || box_pos == NULL)
+    if (new_pos == NULL)
         return;
-    box_pos->x = player->pos->x;
-    box_pos->y = player->pos->y;
-    new_pos = calculate_new_position(key, box_pos, new_pos);
-    box_pos->x = new_pos->x;
-    box_pos->y = new_pos->y;
-    new_pos = calculate_new_position(key, box_pos, new_pos);
-    if (is_box_moveable(map, new_pos->x, new_pos->y) == 1) {
-        map[box_pos->y][box_pos->x] = ' ';
-        map[new_pos->y][new_pos->x] = 'X';
-        player->pos->x = box_pos->x;
-        player->pos->y = box_pos->y;
+    calculate_new_position(key, box->pos, new_pos);
+    move_type = is_box_moveable(map, new_pos->x, new_pos->y);
+    if (move_type == 0)
+        return;
+    if (move_type == 1) {
+        map[box->pos->y][box->pos->x] = box->c;
+        box->c = map[new_pos->y][new_pos->x];
+        box->pos->x = new_pos->x;
+        box->pos->y = new_pos->y;
+        map[box->pos->y][box->pos->x] = BOX_CHAR;
+        player_make_action(key, game, map);
     }
     free(new_pos);
-    free(box_pos);
 }
 
 box_t **create_boxes(char **map, int box_count)

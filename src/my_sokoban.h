@@ -6,15 +6,15 @@
 */
 
 #pragma once
-
-#include "box.h"
-#include "storage.h"
-#include "player.h"
 #define WALL_CHAR '#'
 #define PLAYER_CHAR 'P'
 #define DEFAULT_CHAR ' '
 #define BOX_CHAR 'X'
 #define STORAGE_CHAR 'O'
+
+typedef struct player_s player_t;
+typedef struct box_s box_t;
+typedef struct storage_s storage_t;
 
 typedef enum game_state_e {
     WIN = 0,

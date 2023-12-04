@@ -6,6 +6,7 @@
 */
 
 #include "player.h"
+#include "box.h"
 #include "my_sokoban.h"
 #include "position.h"
 #include <curses.h>
@@ -16,31 +17,42 @@ static int is_player_moveable(char **map, int new_x, int new_y)
 {
     if (map[new_y][new_x] != WALL_CHAR && map[new_y][new_x] != '\0'
         && map[new_y][new_x] != BOX_CHAR)
-        return 1;
+        return MOVE;
     if (map[new_y][new_x] == BOX_CHAR)
-        return 2;
-    return 0;
+        return PUSH;
+    return NONE;
 }
 
-void move_player(int key, player_t *player, char **map)
+static void player_move(game_t *game, position_t *new_pos)
+{
+    char **map = game->map;
+    player_t *player = game->player;
+
+    map[game->player->pos->y][game->player->pos->x] = game->player->c;
+    game->player->c = map[new_pos->y][new_pos->x];
+    game->player->pos->x = new_pos->x;
+    game->player->pos->y = new_pos->y;
+    map[new_pos->y][new_pos->x] = PLAYER_CHAR;
+}
+
+void player_make_action(int key, game_t *game, char **map)
 {
     position_t *new_pos = malloc(sizeof(position_t));
+    box_t *box = NULL;
     int move_type = 0;
 
     if (new_pos == NULL)
         return;
-    calculate_new_position(key, player->pos, new_pos);
+    calculate_new_position(key, game->player->pos, new_pos);
     move_type = is_player_moveable(map, new_pos->x, new_pos->y);
-    if (move_type == 0)
-        return;
-    if (move_type == 1) {
-        map[player->pos->y][player->pos->x] = player->c;
-        player->c = map[new_pos->y][new_pos->x];
-        player->pos->x = new_pos->x;
-        player->pos->y = new_pos->y;
-    }
-    if (move_type == 2) {
-        move_box(key, player, map);
+    switch (move_type) {
+    case MOVE:
+        player_move(game, new_pos);
+        break;
+    case PUSH:
+        box = get_box_at_pos(game->boxes, new_pos->x, new_pos->y);
+        move_box(key, game, box);
+        break;
     }
     free(new_pos);
 }
