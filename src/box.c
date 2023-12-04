@@ -9,6 +9,7 @@
 #include "player.h"
 #include "position.h"
 #include "my_sokoban.h"
+#include "include/my_strings.h"
 #include <curses.h>
 #include <stdlib.h>
 #include <ncurses.h>
@@ -18,6 +19,11 @@ static int is_box_moveable(char **map, int new_x, int new_y)
     if (map[new_y][new_x] != WALL_CHAR && map[new_y][new_x] != '\0'
         && map[new_y][new_x] != BOX_CHAR)
         return 1;
+    return 0;
+}
+
+int is_box_stuck(char **map, box_t *box, player_t *player)
+{
     return 0;
 }
 
