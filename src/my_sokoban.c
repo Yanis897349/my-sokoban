@@ -43,13 +43,38 @@ static char **get_map(char *filepath)
     return map;
 }
 
-void display_map(char **map, player_t *player)
+static int is_game_win(game_t *game)
 {
-    for (int i = 0; map[i] != NULL; i++) {
-        for (int j = 0; map[i][j] != '\0'; j++) {
-            mvprintw(i, j, "%c", map[i][j]);
+    for (int i = 0; game->boxes[i] != NULL; i++) {
+        if (game->boxes[i]->c != STORAGE_CHAR)
+            return 0;
+    }
+    return 1;
+}
+
+static int is_game_loose(game_t *game)
+{
+    for (int i = 0; game->boxes[i] != NULL; i++) {
+        if (is_box_stuck(game->map, game->boxes[i], game->player) == 1)
+            return 1;
+    }
+    return 0;
+}
+
+game_state_t display_map(game_t *game)
+{
+    if (is_game_win(game) == 1) {
+        return WIN;
+    }
+    if (is_game_loose(game) == 1) {
+        return DEFEAT;
+    }
+    for (int i = 0; game->map[i] != NULL; i++) {
+        for (int j = 0; game->map[i][j] != '\0'; j++) {
+            mvprintw(i, j, "%c", game->map[i][j]);
         }
     }
+    return PLAYING;
 }
 
 static game_t *create_game(char **map)
@@ -70,6 +95,7 @@ static game_t *create_game(char **map)
     game->storages = create_storages(map, game->nb_storages);
     if (game->storages == NULL)
         return NULL;
+    game->state = PLAYING;
     return game;
 }
 
@@ -83,7 +109,9 @@ static int run_game_loop(game_t *game)
     curs_set(0);
     while (key != 'q') {
         player_make_action(key, game, game->map);
-        display_map(game->map, game->player);
+        game->state = display_map(game);
+        if (game->state == WIN || game->state == DEFEAT)
+            break;
         refresh();
         key = getch();
     }
