@@ -15,6 +15,8 @@
 #include "include/my_strings.h"
 #include "include/my_std.h"
 #include "my_sokoban.h"
+#include "box.h"
+#include "storage.h"
 #include "player.h"
 #include "position.h"
 
@@ -41,19 +43,11 @@ static char **get_map(char *filepath)
     return map;
 }
 
-void update_player_in_map(player_t *player, char **map, int i, int j)
-{
-    if (i == player->pos->y && j == player->pos->x)
-        mvprintw(i, j, "%c", PLAYER_CHAR);
-    else
-        mvprintw(i, j, "%c", map[i][j]);
-}
-
 void display_map(char **map, player_t *player)
 {
     for (int i = 0; map[i] != NULL; i++) {
         for (int j = 0; map[i][j] != '\0'; j++) {
-            update_player_in_map(player, map, i, j);
+            mvprintw(i, j, "%c", map[i][j]);
         }
     }
 }
@@ -88,7 +82,7 @@ static int run_game_loop(game_t *game)
     noecho();
     curs_set(0);
     while (key != 'q') {
-        move_player(key, game->player, game->map);
+        player_make_action(key, game, game->map);
         display_map(game->map, game->player);
         refresh();
         key = getch();
