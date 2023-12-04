@@ -16,6 +16,7 @@
 #include "include/my_std.h"
 #include "my_sokoban.h"
 #include "player.h"
+#include "position.h"
 
 static void free_game(game_t *game)
 {
@@ -57,6 +58,27 @@ void display_map(char **map, player_t *player)
     }
 }
 
+static game_t *create_game(char **map)
+{
+    game_t *game = malloc(sizeof(game_t));
+
+    if (game == NULL)
+        return NULL;
+    game->map = map;
+    game->player = create_player(map);
+    if (game->player == NULL)
+        return NULL;
+    game->nb_boxes = get_pos_count(map, BOX_CHAR);
+    game->boxes = create_boxes(map, game->nb_boxes);
+    if (game->boxes == NULL)
+        return NULL;
+    game->nb_storages = get_pos_count(map, STORAGE_CHAR);
+    game->storages = create_storages(map, game->nb_storages);
+    if (game->storages == NULL)
+        return NULL;
+    return game;
+}
+
 static int run_game_loop(game_t *game)
 {
     int key = 0;
@@ -77,16 +99,14 @@ static int run_game_loop(game_t *game)
 
 int main(int ac, char **av)
 {
-    int key = 0;
-    game_t *game = malloc(sizeof(game_t));
+    char **map = NULL;
+    game_t *game = NULL;
 
+    map = get_map(av[1]);
+    if (map == NULL)
+        return 84;
+    game = create_game(map);
     if (game == NULL)
-        return 84;
-    game->map = get_map(av[1]);
-    if (game->map == NULL)
-        return 84;
-    game->player = create_player(game->map);
-    if (game->player == NULL)
         return 84;
     if (run_game_loop(game) == EXIT_FAILURE)
         return 84;
