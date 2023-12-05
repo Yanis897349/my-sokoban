@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "include/my_strings.h"
+#include "include/my_io.h"
 #include "include/my_std.h"
 #include "my_sokoban.h"
 #include "box.h"
@@ -105,11 +106,25 @@ static void run_game_loop(game_t *game)
     endwin();
 }
 
+void display_usage(void)
+{
+    my_putstr("USAGE\n");
+    my_putstr("    ./my_sokoban map\n");
+    my_putstr("DESCRIPTION\n");
+    my_putstr("    map    file representing the warehouse map, containing ");
+    my_putstr("'#' for walls,\n    'P' for the player, 'X' for boxes and 'O'");
+    my_putstr(" for storage locations.\n");
+}
+
 int main(int ac, char **av)
 {
     char **map = NULL;
     game_t *game = NULL;
 
+    if (ac == 2 && my_strcmp(av[1], "-h") == 0) {
+        display_usage();
+        return 84;
+    }
     map = get_map(av[1]);
     if (map == NULL)
         return 84;
