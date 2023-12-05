@@ -22,6 +22,7 @@
 #include "player.h"
 #include "position.h"
 #include "utils.h"
+#include "screen.h"
 
 static int is_game_win(game_t *game)
 {
@@ -49,11 +50,7 @@ game_state_t display_map(game_t *game)
     if (is_game_loose(game) == 1) {
         return DEFEAT;
     }
-    for (int i = 0; game->map[i] != NULL; i++) {
-        for (int j = 0; game->map[i][j] != '\0'; j++) {
-            mvprintw(i, j, "%c", game->map[i][j]);
-        }
-    }
+    display_screen(game->map);
     return PLAYING;
 }
 
@@ -96,7 +93,6 @@ static void run_game_loop(game_t *game)
         game->state = display_map(game);
         if (game->state == WIN || game->state == DEFEAT)
             break;
-        refresh();
         key = getch();
     }
     endwin();

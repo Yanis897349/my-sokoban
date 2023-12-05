@@ -90,7 +90,8 @@ STRINGS_FUNCS := ./strings/my_revstr.c \
 				 ./strings/my_memcpy.c \
 				 ./strings/my_memset.c \
 				 ./strings/buffer_to_array.c \
-				 ./strings/file_to_buffer.c
+				 ./strings/file_to_buffer.c \
+				 ./strings/my_array_len.c
 
 STD_FUNCS = ./std/my_realloc.c \
 	./std/my_freearray.c

@@ -12,14 +12,6 @@
 #include "include/my_strings.h"
 #include <stdlib.h>
 
-static int my_array_len(char **array)
-{
-    int i = 0;
-
-    for (; array[i] != NULL; i++);
-    return i;
-}
-
 static char **my_strcpy_array(char **map)
 {
     char **new_map = malloc(sizeof(char *) * (my_array_len(map) + 1));

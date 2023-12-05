@@ -17,7 +17,8 @@ SRC = ./src/player.c \
 	./src/box.c \
 	./src/storage.c \
 	./src/utils.c \
-	./src/game.c
+	./src/game.c \
+	./src/screen.c
 SRC_TEST = ./tests/test_sokoban.c
 OBJS = $(MAIN_SRC:.c=.o) $(SRC:.c=.o)
 TEST_OBJS = $(SRC:.c=.o) $(SRC_TEST:.c=.o)
