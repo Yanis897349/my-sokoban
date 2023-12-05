@@ -40,13 +40,6 @@ static int is_game_loose(game_t *game)
     return 0;
 }
 
-static int is_game_valid(game_t *game)
-{
-    if (game->nb_boxes != game->nb_storages)
-        return 0;
-    return 1;
-}
-
 game_state_t display_map(game_t *game)
 {
     if (is_game_win(game) == 1) {
@@ -82,8 +75,6 @@ static game_t *create_game(char **map)
     if (game->storages == NULL)
         return NULL;
     game->state = PLAYING;
-    if (is_game_valid(game) == 0)
-        return NULL;
     return game;
 }
 
