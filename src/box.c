@@ -24,6 +24,21 @@ static int is_box_moveable(char **map, int new_x, int new_y)
 
 int is_box_stuck(char **map, box_t *box, player_t *player)
 {
+    int x = box->pos->x;
+    int y = box->pos->y;
+
+    if ((map[y + 1][x] == WALL_CHAR)
+        && (map[y][x + 1] == WALL_CHAR))
+        return 1;
+    if ((map[y + 1][x] == WALL_CHAR)
+        && (map[y][x - 1] == WALL_CHAR))
+        return 1;
+    if ((map[y - 1][x] == WALL_CHAR)
+        && (map[y][x + 1] == WALL_CHAR))
+        return 1;
+    if ((map[y - 1][x] == WALL_CHAR)
+        && (map[y][x - 1] == WALL_CHAR))
+        return 1;
     return 0;
 }
 
