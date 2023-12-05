@@ -17,6 +17,7 @@
 #include "include/my_std.h"
 #include "my_sokoban.h"
 #include "box.h"
+#include "game.h"
 #include "storage.h"
 #include "player.h"
 #include "position.h"
@@ -75,6 +76,7 @@ static game_t *create_game(char **map)
     if (game->storages == NULL)
         return NULL;
     game->state = PLAYING;
+    game->copy = make_game_copy(game);
     return game;
 }
 
@@ -87,6 +89,9 @@ static void run_game_loop(game_t *game)
     noecho();
     curs_set(0);
     while (key != 'q') {
+        if (key == ' ') {
+            reset_game(game);
+        }
         player_make_action(key, game, game->map);
         game->state = display_map(game);
         if (game->state == WIN || game->state == DEFEAT)
