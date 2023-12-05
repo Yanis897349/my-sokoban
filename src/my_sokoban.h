@@ -30,4 +30,5 @@ typedef struct game_s {
     int nb_boxes;
     int nb_storages;
     game_state_t state;
+    struct game_s *copy;
 } game_t;

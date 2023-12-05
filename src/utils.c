@@ -43,6 +43,8 @@ void free_game(game_t *game)
     free_boxes(game->boxes);
     free_storages(game->storages);
     my_freearray(game->map);
+    if (game->copy != NULL)
+        free_game(game->copy);
     free(game);
 }
 
