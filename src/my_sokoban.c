@@ -38,7 +38,7 @@ static int is_game_loose(game_t *game)
     int box_stuck_count = 0;
 
     for (int i = 0; game->boxes[i] != NULL; i++) {
-        if (is_box_stuck(game->map, game->boxes[i], game->player) == 1)
+        if (is_box_stuck(game->map, game->boxes[i]))
             box_stuck_count++;
     }
     if (box_stuck_count == game->nb_boxes)
@@ -48,10 +48,10 @@ static int is_game_loose(game_t *game)
 
 game_state_t display_map(game_t *game)
 {
-    if (is_game_win(game) == 1) {
+    if (is_game_win(game)) {
         return WIN;
     }
-    if (is_game_loose(game) == 1) {
+    if (is_game_loose(game)) {
         return DEFEAT;
     }
     display_screen(game->map);
@@ -116,6 +116,7 @@ int main(int ac, char **av)
 {
     char **map = NULL;
     game_t *game = NULL;
+    game_state_t state = 0;
 
     if (ac == 2 && my_strcmp(av[1], "-h") == 0) {
         display_usage();
@@ -128,6 +129,7 @@ int main(int ac, char **av)
     if (game == NULL)
         return 84;
     run_game_loop(game);
+    state = game->state;
     free_game(game);
-    return game->state;
+    return state;
 }
