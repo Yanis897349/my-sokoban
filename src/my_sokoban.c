@@ -35,10 +35,14 @@ static int is_game_win(game_t *game)
 
 static int is_game_loose(game_t *game)
 {
+    int box_stuck_count = 0;
+
     for (int i = 0; game->boxes[i] != NULL; i++) {
         if (is_box_stuck(game->map, game->boxes[i], game->player) == 1)
-            return 1;
+            box_stuck_count++;
     }
+    if (box_stuck_count == game->nb_boxes)
+        return 1;
     return 0;
 }
 
