@@ -28,10 +28,10 @@ static void player_move(game_t *game, position_t *new_pos)
     char **map = game->map;
     player_t *player = game->player;
 
-    map[game->player->pos->y][game->player->pos->x] = game->player->c;
-    game->player->c = map[new_pos->y][new_pos->x];
-    game->player->pos->x = new_pos->x;
-    game->player->pos->y = new_pos->y;
+    map[player->pos->y][player->pos->x] = player->c;
+    player->c = map[new_pos->y][new_pos->x];
+    player->pos->x = new_pos->x;
+    player->pos->y = new_pos->y;
     map[new_pos->y][new_pos->x] = PLAYER_CHAR;
 }
 
