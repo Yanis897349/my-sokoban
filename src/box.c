@@ -22,7 +22,7 @@ static int is_box_moveable(char **map, int new_x, int new_y)
     return 0;
 }
 
-int is_box_stuck(char **map, box_t *box, player_t *player)
+int is_box_stuck(char **map, box_t *box)
 {
     int x = box->pos->x;
     int y = box->pos->y;
@@ -42,7 +42,7 @@ int is_box_stuck(char **map, box_t *box, player_t *player)
     return 0;
 }
 
-static box_t *create_box(char **map, position_t *pos)
+static box_t *create_box(position_t *pos)
 {
     box_t *box = malloc(sizeof(box_t));
 
@@ -67,7 +67,6 @@ box_t *get_box_at_pos(box_t **boxes, int x, int y)
 void move_box(int key, game_t *game, box_t *box)
 {
     position_t *new_pos = malloc(sizeof(position_t));
-    player_t *player = game->player;
     char **map = game->map;
     int move_type = 0;
 
@@ -98,7 +97,7 @@ box_t **create_boxes(char **map, int box_count)
     if (positions == NULL)
         return NULL;
     for (int i = 0; i < box_count; i++) {
-        boxes[i] = create_box(map, positions[i]);
+        boxes[i] = create_box(positions[i]);
         if (boxes[i] == NULL)
             return NULL;
     }

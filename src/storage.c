@@ -21,7 +21,7 @@ int get_storage_count(char **map)
     return storage_count;
 }
 
-static storage_t *create_storage(char **map, position_t *pos)
+static storage_t *create_storage(position_t *pos)
 {
     storage_t *storage = malloc(sizeof(storage_t));
 
@@ -44,7 +44,7 @@ storage_t **create_storages(char **map, int storage_count)
     if (positions == NULL)
         return NULL;
     for (int i = 0; i < storage_count; i++) {
-        storages[i] = create_storage(map, positions[i]);
+        storages[i] = create_storage(positions[i]);
         if (storages[i] == NULL)
             return NULL;
     }
