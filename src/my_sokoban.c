@@ -48,13 +48,13 @@ static int is_game_loose(game_t *game)
 
 game_state_t display_map(game_t *game)
 {
+    display_screen(game->map);
     if (is_game_win(game)) {
         return WIN;
     }
     if (is_game_loose(game)) {
         return DEFEAT;
     }
-    display_screen(game->map);
     return PLAYING;
 }
 
